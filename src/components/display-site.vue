@@ -13,7 +13,7 @@
     </div>
 </template>
 <script>
-import LineExample from '../../chartData.js'
+import LineChart from '../../chartData.js'
 export default {
   name: 'MainDisplay',
   data () {
@@ -55,15 +55,46 @@ export default {
     }
   },
   components: {
+    LineChart,
     CompanyBlock: {
       props: ['name'],
       components: {
-        'LineExample': LineExample
+        'LineChart': LineChart
+      },
+      data () {
+        return {
+          datacollection: null
+        }
+      },
+      mounted () {
+        this.fillData()
+      },
+      methods: {
+        fillData () {
+          this.datacollection = {
+            labels: [this.getRandomInt(), this.getRandomInt()],
+            datasets: [
+              {
+                label: 'Data One',
+                backgroundColor: '#f87979',
+                data: [this.getRandomInt(), this.getRandomInt()]
+              }, {
+                label: 'Data One',
+                backgroundColor: '#f87979',
+                data: [this.getRandomInt(), this.getRandomInt()]
+              }
+            ]
+          }
+        },
+        getRandomInt () {
+          return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+        }
       },
       template: `<div class="container">
                     <h2>Trending Tickers</h2>
-                        <h4>{{name}}</h5>
-                        <LineExample></LineExample>
+                        <h4>{{name}}</h4>
+                        <LineChart :chart-data="datacollection"></LineChart>
+                        <button @click="fillData()">Randomize</button>
                 </div>`
     }
   }
