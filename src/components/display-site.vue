@@ -13,7 +13,9 @@
     </div>
 </template>
 <script>
-import LineChart from '../../chartData.js'
+/*  global document, alert, console, require */
+import {LineChart, pusher} from '../../chartData.js'
+//  import Pusher from 'pusher-js'
 export default {
   name: 'MainDisplay',
   data () {
@@ -63,38 +65,93 @@ export default {
       },
       data () {
         return {
-          datacollection: null
+          datacollection: null,
+          chartOptions: {
+            responsive: true,
+            title: {
+              display: true,
+              text: 'Stock Prices'
+            },
+            tooltips: {
+              mode: 'index',
+              intersect: false
+            },
+            hover: {
+              mode: 'nearest',
+              intersect: true
+            },
+            scales: {
+              xAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Time  '
+                  }
+                }
+              ],
+              yAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Price'
+                  },
+                  ticks: {
+                    min: 500,
+                    max: 510
+                  }
+                }
+              ]
+            },
+            animation: false
+          },
+          pusher: pusher,
+          dataUpdated: null
         }
       },
       mounted () {
+        this.dataUpdated = false
         this.fillData()
+        this.subscribeToEventChannel()
+      },
+      computed: {
+        updateCollection: function () {
+          if (!this.dataUpdated) {
+            return this.datacollection
+          }
+        }
       },
       methods: {
         fillData () {
           this.datacollection = {
-            labels: [this.getRandomInt(), this.getRandomInt()],
+            labels: [],
             datasets: [
               {
-                label: 'Data One',
-                backgroundColor: '#f87979',
-                data: [this.getRandomInt(), this.getRandomInt()]
-              }, {
-                label: 'Data One',
-                backgroundColor: '#f87979',
-                data: [this.getRandomInt(), this.getRandomInt()]
+                label: 'GOOG',
+                backgroundColor: 'rgb(125, 195, 242)',
+                borderColor: 'rgb(54, 162, 235)',
+                data: []
               }
             ]
           }
         },
-        getRandomInt () {
-          return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+        subscribeToEventChannel () {
+          var channel = this.pusher.subscribe('trade')
+          channel.bind('stock', data => {
+            this.updateChartData(data)
+          })
+        },
+        updateChartData (data) {
+          this.datacollection.labels.push(data.Timestamp.split(' ')[1].split('.')[0])
+          this.datacollection.datasets[0].data.push(data.Price)
+          this.dataUpdated = !this.dataUpdated
         }
       },
       template: `<div class="container">
                     <h2>Trending Tickers</h2>
                         <h4>{{name}}</h4>
-                        <LineChart :chart-data="datacollection"></LineChart>
-                        <button @click="fillData()">Randomize</button>
+                        <LineChart :options = "chartOptions" :chartData="updateCollection"></LineChart>
                 </div>`
     }
   }

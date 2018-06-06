@@ -17,4 +17,4 @@ setInterval(function () {
     var GOOG = stockData[1]['Trades'][i];
     pusher.trigger('trade', 'stock', GOOG);
     i += 1;
-}, 5000);
+}, 2000);
