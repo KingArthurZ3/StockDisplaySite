@@ -12,8 +12,9 @@
     <CompanyBlock v-for="company in filteredCompanies" :key="company" class="single-company" v-bind:name="company.name"></CompanyBlock>
     </div>
 </template>
+
 <script>
-/*  global document, alert, console, require */
+/*  global document, alert, console, require, Math */
 import {LineChart, pusher} from '../../chartData.js'
 //  import Pusher from 'pusher-js'
 export default {
@@ -96,10 +97,6 @@ export default {
                   scaleLabel: {
                     display: true,
                     labelString: 'Price'
-                  },
-                  ticks: {
-                    min: 500,
-                    max: 510
                   }
                 }
               ]
@@ -107,12 +104,14 @@ export default {
             animation: false
           },
           pusher: pusher,
-          dataUpdated: null
+          dataUpdated: null,
+          yMin: 0,
+          yMax: 0
         }
       },
       mounted () {
-        this.dataUpdated = false
         this.fillData()
+        this.dataUpdated = false
         this.subscribeToEventChannel()
       },
       computed: {
@@ -120,6 +119,9 @@ export default {
           if (!this.dataUpdated) {
             return this.datacollection
           }
+        },
+        updateOptions: function () {
+          return this.chartOptions
         }
       },
       methods: {
@@ -145,18 +147,21 @@ export default {
         updateChartData (data) {
           this.datacollection.labels.push(data.Timestamp.split(' ')[1].split('.')[0])
           this.datacollection.datasets[0].data.push(data.Price)
+          this.yMin = Math.min([this.datacollection.datasets[0].data])
+          this.yMax = Math.max([this.datacollection.datasets[0].data])
           this.dataUpdated = !this.dataUpdated
         }
       },
       template: `<div class="container">
                     <h2>Trending Tickers</h2>
                         <h4>{{name}}</h4>
-                        <LineChart :options = "chartOptions" :chartData="updateCollection"></LineChart>
+                        <div style="position: relative; max-height: 20%; max-width: 90%;">
+                            <LineChart style="width: 70%; height: 15%;":options = "updateOptions" :chartData="updateCollection"></LineChart>
+                        </div>
                 </div>`
     }
   }
 }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -229,6 +234,12 @@ export default {
         padding: 5px;
     }
     /* styles for each company block */
+    .container {
+        position: relative;
+        display: block;
+        height: 30%;
+        width: 100%;
+    }
     .company-display{
         width: auto;
         height: 400px;
