@@ -1,7 +1,9 @@
-/*global document, window, alert, console, require*/
+/*global document, window, alert, console, require, config*/
 var requirejs = require('requirejs');
 var stockData = require('./src/assets/stock.json');
 var Pusher = require('pusher');
+var config = require('./config.js');
+var av = require('alphavantage')({key: '89RBTI0KIUM8F1JV', outputsize: 'compact', datatype: 'json'});
 
 var pusher = new Pusher({
         appId: '536045',
@@ -11,10 +13,26 @@ var pusher = new Pusher({
         encrypted: true
     });
 
-var i = 0;
+var comp_dict = ['GOOG', 'AAPL', 'MSFT', 'AMZN', 'INTC', 'TSLA'];
+
+// formats strings similarly to python
+String.prototype.format = function () {
+    'use strict';
+    var args = arguments;
+    return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (curlyBrack, index) {
+        return ((curlyBrack === "{{") ? "{" : ((curlyBrack === "}}") ? "}" : args[index]));
+    });
+};
+
 setInterval(function () {
     "use strict";
-    var GOOG = stockData[1]['Trades'][i];
-    pusher.trigger('trade', 'stock', GOOG);
-    i += 1;
-}, 500);
+    av.data.batch({symbols: comp_dict, datatype: 'json'}).then( 
+        data => {
+            pusher.trigger('trade', 'stock', data['Stock  Quotes']);
+        }).catch((err) => {
+            // Handle error here
+        })
+//    var GOOG = stockData[1]['Trades'][i];
+//    pusher.trigger('trade', 'stock', GOOG);
+//    i += 1;
+}, 2000);

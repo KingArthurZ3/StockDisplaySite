@@ -12,6 +12,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "alpha-vantage-cli": "^1.0.8",
+    "alphavantage": "^1.1.1",
     "chart.js": "^2.7.2",
     "pusher": "^2.0.0",
     "pusher-js": "^4.2.2",
