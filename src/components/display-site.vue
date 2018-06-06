@@ -66,7 +66,14 @@ export default {
       },
       data () {
         return {
-          datacollection: null,
+          datacollection: [
+            {'Apple': null},
+            {'Microsoft': null},
+            {'Amazon': null},
+            {'Intel': null},
+            {'Tesla': null},
+            {'Google': null}
+          ],
           chartOptions: {
             responsive: true,
             title: {
@@ -130,7 +137,7 @@ export default {
             labels: [],
             datasets: [
               {
-                label: 'GOOG',
+                label: this.companies.name,
                 backgroundColor: 'rgb(125, 195, 242)',
                 borderColor: 'rgb(54, 162, 235)',
                 data: []
@@ -145,7 +152,8 @@ export default {
           })
         },
         updateChartData (data) {
-          this.datacollection.labels.push(data.Timestamp.split(' ')[1].split('.')[0])
+          //  this.datacollection.labels.push(data.Timestamp.split(' ')[1].split('.')[0])
+          this.datacollection.labels.push()
           this.datacollection.datasets[0].data.push(data.Price)
           this.yMin = Math.min([this.datacollection.datasets[0].data])
           this.yMax = Math.max([this.datacollection.datasets[0].data])
