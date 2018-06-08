@@ -2,8 +2,7 @@
 var requirejs = require('requirejs');
 var stockData = require('./src/assets/stock.json');
 var Pusher = require('pusher');
-var config = require('./config.js');
-var av = require('alphavantage')({key: '89RBTI0KIUM8F1JV', outputsize: 'compact', datatype: 'json'});
+var av = require('alphavantage')({key: '89RBTI0KIUM8F1JV'});
 
 var pusher = new Pusher({
         appId: '536045',
@@ -26,11 +25,13 @@ String.prototype.format = function () {
 
 setInterval(function () {
     "use strict";
-    av.data.batch({symbols: comp_dict, datatype: 'json'}).then( 
+    av.data.batch({symbols: comp_dict, datatype: 'json', outputsize: 'compact'}).then( 
         data => {
-            pusher.trigger('trade', 'stock', data['Stock  Quotes']);
+            console.log(data)
+            pusher.trigger('trade', 'stock', data['Stock Quotes']);
         }).catch((err) => {
             // Handle error here
+            console.log('a problem happened')
         })
 //    var GOOG = stockData[1]['Trades'][i];
 //    pusher.trigger('trade', 'stock', GOOG);

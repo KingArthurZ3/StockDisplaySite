@@ -8,6 +8,8 @@ export var LineChart = {
     extends: Line,
     mixins: [reactiveProp],
     props: ['chartData', 'options'],
+    data () {
+    },
     mounted () {
       // this.chartData is created in the mixin
       // pass options by creating local options object

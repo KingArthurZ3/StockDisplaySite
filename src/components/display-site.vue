@@ -22,12 +22,12 @@ export default {
   data () {
     return {
       companies: [
-        {name: 'Apple'},
-        {name: 'Microsoft'},
-        {name: 'Amazon'},
-        {name: 'Intel'},
-        {name: 'Tesla'},
-        {name: 'Google'}
+        {name: 'APPL'},
+        {name: 'MSFT'},
+        {name: 'AMZN'},
+        {name: 'INTC'},
+        {name: 'TSLA'},
+        {name: 'GOOG'}
       ],
       searchQuery: '',
       isCompany: false
@@ -67,12 +67,12 @@ export default {
       data () {
         return {
           datacollection: [
-            {'Apple': null},
-            {'Microsoft': null},
-            {'Amazon': null},
-            {'Intel': null},
-            {'Tesla': null},
-            {'Google': null}
+            {'APPL': null},
+            {'MSFT': null},
+            {'AMZN': null},
+            {'INTC': null},
+            {'TSLA': null},
+            {'GOOG': null}
           ],
           chartOptions: {
             responsive: true,
@@ -124,7 +124,7 @@ export default {
       computed: {
         updateCollection: function () {
           if (!this.dataUpdated) {
-            return this.datacollection
+            return this.datacollection[this.name]
           }
         },
         updateOptions: function () {
@@ -133,11 +133,11 @@ export default {
       },
       methods: {
         fillData () {
-          this.datacollection = {
+          this.datacollection[this.name] = {
             labels: [],
             datasets: [
               {
-                label: this.companies.name,
+                label: this.name,
                 backgroundColor: 'rgb(125, 195, 242)',
                 borderColor: 'rgb(54, 162, 235)',
                 data: []
@@ -152,11 +152,13 @@ export default {
           })
         },
         updateChartData (data) {
-          //  this.datacollection.labels.push(data.Timestamp.split(' ')[1].split('.')[0])
-          this.datacollection.labels.push()
-          this.datacollection.datasets[0].data.push(data.Price)
-          this.yMin = Math.min([this.datacollection.datasets[0].data])
-          this.yMax = Math.max([this.datacollection.datasets[0].data])
+          //          this.datacollection.labels.push(data.Timestamp.split(' ')[1].split('.')[0])
+          for (var i = 0; i < data.length; i++) {
+            this.datacollection[data[i]['1. symbol']].labels.push(data[i]['4. timestamp'].split(' ')[1].split('.')[0])
+            this.datacollection[data[i]['1. symbol']].datasets[0].data.push(data[i]['2. price'])
+          }
+          //          this.yMin = Math.min([this.datacollection.datasets[0].data])
+          //          this.yMax = Math.max([this.datacollection.datasets[0].data])
           this.dataUpdated = !this.dataUpdated
         }
       },
