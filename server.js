@@ -2,7 +2,7 @@
 var requirejs = require('requirejs');
 var stockData = require('./src/assets/stock.json');
 var Pusher = require('pusher');
-var av = require('alphavantage')({key: '89RBTI0KIUM8F1JV'});
+const av = require('alphavantage')({key: '89RBTI0KIUM8F1JV', datatype: 'json', outputsize: 'compact'});
 
 var pusher = new Pusher({
         appId: '536045',
@@ -25,9 +25,9 @@ String.prototype.format = function () {
 
 setInterval(function () {
     "use strict";
-    av.data.batch({symbols: comp_dict, datatype: 'json', outputsize: 'compact'}).then( 
+    av.data.batch(comp_dict).then( 
         data => {
-            console.log(data)
+            console.log(data['Stock Quotes'][0]['4. timestamp']);
             pusher.trigger('trade', 'stock', data['Stock Quotes']);
         }).catch((err) => {
             // Handle error here

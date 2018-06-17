@@ -67,12 +67,6 @@ export default {
       data () {
         return {
           datacollection: [
-            {'APPL': null},
-            {'MSFT': null},
-            {'AMZN': null},
-            {'INTC': null},
-            {'TSLA': null},
-            {'GOOG': null}
           ],
           chartOptions: {
             responsive: true,
@@ -133,6 +127,7 @@ export default {
       },
       methods: {
         fillData () {
+          console.log(this.name)
           this.datacollection[this.name] = {
             labels: [],
             datasets: [
@@ -154,8 +149,11 @@ export default {
         updateChartData (data) {
           //          this.datacollection.labels.push(data.Timestamp.split(' ')[1].split('.')[0])
           for (var i = 0; i < data.length; i++) {
-            this.datacollection[data[i]['1. symbol']].labels.push(data[i]['4. timestamp'].split(' ')[1].split('.')[0])
-            this.datacollection[data[i]['1. symbol']].datasets[0].data.push(data[i]['2. price'])
+            console.log(this.datacollection[this.name])
+            if (this.name === data[i]['1. symbol']) {
+              this.datacollection[data[i]['1. symbol']].labels.push(data[i]['4. timestamp'].split(' ')[1].split('.')[0])
+              this.datacollection[data[i]['1. symbol']].datasets[0].data.push(data[i]['2. price'])
+            }
           }
           //          this.yMin = Math.min([this.datacollection.datasets[0].data])
           //          this.yMax = Math.max([this.datacollection.datasets[0].data])
@@ -199,7 +197,7 @@ export default {
     }
     #intro-container {
         width: 60%;
-        padding: 5px;
+        padding: 10px;
         margin-left: auto;
         margin-right: auto;
         background-color: #F2F5F8;
