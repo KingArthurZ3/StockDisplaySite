@@ -1,17 +1,17 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+    <div id="app">
+        <router-view/>
+    </div>
 </template>
 
 <script>
-import MainDisplay from './components/display-site'
+import MainDisplay from './components/DisplaySite'
 
 export default {
-  name: 'App',
-  components: {
-    MainDisplay
-  }
+    name: 'App',
+    components: {
+        MainDisplay
+    }
 }
 </script>
 

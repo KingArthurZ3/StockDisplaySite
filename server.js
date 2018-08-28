@@ -33,7 +33,4 @@ setInterval(function () {
             // Handle error here
             console.log('a problem happened')
         })
-//    var GOOG = stockData[1]['Trades'][i];
-//    pusher.trigger('trade', 'stock', GOOG);
-//    i += 1;
-}, 2000);
+}, 4000);
