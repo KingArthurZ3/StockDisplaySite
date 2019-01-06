@@ -14,7 +14,7 @@
             Predictions
         </b>
         <div>
-            These are predictions
+            Predicted Selling Price: 130.80
         </div>
     </div>
 </div>
