@@ -29,6 +29,7 @@ Mr. Stock Market is an intelligent trading advisor that analyzes numeric financi
 ![network structure](https://github.com/KingArthurZ3/StockDisplaySite/blob/master/assets/10OBV.png "Stock Display Site")
 ![network structure](https://github.com/KingArthurZ3/StockDisplaySite/blob/master/assets/SMA.png "Stock Display Site")
 ![network structure](https://github.com/KingArthurZ3/StockDisplaySite/blob/master/assets/VIX.png "Stock Display Site")
+
 Sample numerical data used as features in machine learning models
 
 ![network structure](https://github.com/KingArthurZ3/StockDisplaySite/blob/master/assets/GB_CLASSIFIER_1.png "Stock Display Site")
